@@ -10,21 +10,14 @@ import playsound
 # 모델 경로
 model_path = 'gesture_recognizer.task'
 
-
-
-
 # 옵션 설정
+
 BaseOptions = mp.tasks.BaseOptions
 base_options = BaseOptions(model_asset_path=model_path)
 GestureRecognizer = mp.tasks.vision.GestureRecognizer
 GestureRecognizerOptions = mp.tasks.vision.GestureRecognizerOptions
 GestureRecognizerResult = mp.tasks.vision.GestureRecognizerResult
 VisionRunningMode = mp.tasks.vision.RunningMode
-
-mp_hands = mp.solutions.hands
-mp_drawing = mp.solutions.drawing_utils
-hands = mp_hands.Hands(max_num_hands=1, min_detection_confidence=0.7)
-
 
 canplay = True
 
@@ -92,17 +85,6 @@ with GestureRecognizer.create_from_options(options) as recognizer:
 
         # 제스처 인식 수행
         recognizer.recognize_async(mp_image, frame_timestamp_ms)
-        
-        image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        image.flags.writeable = False
-        results = hands.process(image)
-        image.flags.writeable = True
-        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-
-        if results.multi_hand_landmarks:
-            for hand_landmarks in results.multi_hand_landmarks:
-                mp_drawing.draw_landmarks(image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
-
 
         # 결과 출력 및 프레임 표시
         cv2.imshow('Gesture Recognition', frame)
